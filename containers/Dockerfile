@@ -97,4 +97,12 @@ RUN apk --no-cache add \
   php${PHP_VERSION}-pecl-memcache \
   php${PHP_VERSION}-pecl-memcached \
   php${PHP_VERSION}-pecl-xlswriter \
-  ghostscript
+  ghostscript \
+  curl \
+  bash \
+  less
+
+RUN mkdir -p /usr/local/sbin
+
+RUN ln -s /usr/bin/php${PHP_VERSION} /usr/local/sbin/php \
+  && ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/local/sbin/php-fpm
