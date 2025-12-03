@@ -121,3 +121,5 @@ RUN ln -s /etc/php/conf.d/zzz_custom.ini /etc/php${PHP_VERSION}/conf.d/zzz_custo
 RUN mkdir -p /tmp/caddy
 
 WORKDIR /var/www/
+
+CMD ["/init"]
