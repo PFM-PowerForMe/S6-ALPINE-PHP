@@ -1,3 +1,11 @@
 #!/usr/bin/env bash
 
 sed -i "s|\$CADDY_WORK_DIR|${CADDY_WORK_DIR:-/var/www/}|g" "/etc/caddy/Caddyfile"
+
+DEFAULT_REAL_IP="header.X-Forwarded-For"
+if [[ -n "$CADDY_REAL_IP" ]]; then
+    REAL_IP_EXPR="http.request.header.$CADDY_REAL_IP"
+else
+    REAL_IP_EXPR="$DEFAULT_REAL_IP"
+fi
+sed -i "s|\$CADDY_REAL_IP|$REAL_IP_EXPR|g" "/etc/caddy/Caddyfile"
