@@ -111,5 +111,9 @@ RUN ln -s /usr/bin/php${PHP_VERSION} /usr/local/sbin/php \
 
 # ROOTFS
 COPY containers/rootfs /
-RUN chmod +x /etc/s6-overlay/s6-rc.d/caddy/data/check \
+RUN chmod +x /etc/s6-overlay/scripts/* \
+  && chmod +x /etc/s6-overlay/s6-rc.d/caddy/data/check \
   && chmod +x /etc/s6-overlay/s6-rc.d/fpm/data/check
+
+RUN ln -s /etc/php/conf.d/zzz_custom.ini /etc/php${PHP_VERSION}/conf.d/zzz_custom.ini \
+  && ln -s /etc/php/php-fpm.d/zzz_custom.conf /etc/php${PHP_VERSION}/php-fpm.d/zzz_custom.conf

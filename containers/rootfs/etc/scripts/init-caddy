@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+sed -i "s|\$CADDY_WORK_DIR|${CADDY_WORK_DIR:-/var/www/}|g" "/etc/caddy/Caddyfile"
