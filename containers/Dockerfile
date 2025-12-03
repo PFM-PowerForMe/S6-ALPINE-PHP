@@ -108,3 +108,8 @@ RUN mkdir -p /usr/local/sbin
 RUN ln -s /usr/bin/php${PHP_VERSION} /usr/local/sbin/php \
   && ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/local/sbin/php-fpm \
   && ln -s /usr/sbin/caddy /usr/local/sbin/caddy
+
+# ROOTFS
+COPY containers/rootfs /
+RUN chmod +x /etc/s6-overlay/s6-rc.d/caddy/data/check \
+  && chmod +x /etc/s6-overlay/s6-rc.d/fpm/data/check
