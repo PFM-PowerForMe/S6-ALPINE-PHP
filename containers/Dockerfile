@@ -96,4 +96,5 @@ RUN apk --no-cache add \
   php${PHP_VERSION}-pecl-lzf \
   php${PHP_VERSION}-pecl-memcache \
   php${PHP_VERSION}-pecl-memcached \
-  php${PHP_VERSION}-pecl-xlswriter
+  php${PHP_VERSION}-pecl-xlswriter \
+  ghostscript
