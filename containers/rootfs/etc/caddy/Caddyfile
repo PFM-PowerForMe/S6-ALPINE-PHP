@@ -2,7 +2,8 @@
 	admin off
 	persist_config off
 	auto_https off
-	storage_check off
+	storage file_system /tmp/caddy
+	storage_clean_interval 24h
 }
 
 :80 {

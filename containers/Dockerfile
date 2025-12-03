@@ -118,4 +118,6 @@ RUN chmod +x /etc/s6-overlay/scripts/* \
 RUN ln -s /etc/php/conf.d/zzz_custom.ini /etc/php${PHP_VERSION}/conf.d/zzz_custom.ini \
   && ln -s /etc/php/php-fpm.d/zzz_custom.conf /etc/php${PHP_VERSION}/php-fpm.d/zzz_custom.conf
 
+RUN mkdir -p /tmp/caddy
+
 WORKDIR /var/www/
