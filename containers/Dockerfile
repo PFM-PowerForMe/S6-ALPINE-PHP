@@ -100,9 +100,11 @@ RUN apk --no-cache add \
   ghostscript \
   curl \
   bash \
-  less
+  less \
+  caddy
 
 RUN mkdir -p /usr/local/sbin
 
 RUN ln -s /usr/bin/php${PHP_VERSION} /usr/local/sbin/php \
-  && ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/local/sbin/php-fpm
+  && ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/local/sbin/php-fpm \
+  && ln -s /usr/sbin/caddy /usr/local/sbin/caddy
