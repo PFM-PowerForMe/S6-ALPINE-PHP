@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+CONFIG_FILE="/etc/php/php-fpm.d/zzz_custom.conf"
+
+declare -A php_configs=(
+    ["pm"]="${FPM_PM:-static}"
+    ["pm.max_children"]="${FPM_PM_MAX_CHILDREN:-32}"
+    ["pm.start_servers"]="${FPM_PM_START_SERVERS:-8}"
+    ["pm.min_spare_servers"]="${FPM_PM_MIN_SPARE_SERVERS:-4}"
+    ["pm.max_spare_servers"]="${FPM_PM_MAX_SPARE_SERVERS:-16}"
+)
+
+for key in "${!php_configs[@]}"; do
+    # 转义key中的点号用于正则表达式匹配
+    escaped_key="${key//./\\.}"
+    # 执行替换（添加单词边界匹配确保精确匹配）
+    sed -i "s/^;\?\s*$escaped_key\s*=\s*.*/$key = ${php_configs[$key]}/" "$CONFIG_FILE"
+done
