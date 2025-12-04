@@ -3,7 +3,7 @@
 CONFIG_FILE="/etc/php/conf.d/zzz_custom.ini"
 
 declare -A php_configs=(
-    ["memory_limit"]="${PHP_MEMORY_LIMIT:-512M}"
+    ["memory_limit"]="${PHP_MEMORY_LIMIT:-64M}"
     ["post_max_size"]="${PHP_POST_MAX_SIZE:-1024M}"
     ["upload_max_filesize"]="${PHP_UPLOAD_MAX_FILESIZE:-1024M}"
 )
