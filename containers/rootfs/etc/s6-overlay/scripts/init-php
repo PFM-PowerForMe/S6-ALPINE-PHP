@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
-CONFIG_FILE="/etc/php/conf.d/zzz_custom.ini"
+CONFIG_FILE="/custom/php/conf.d/zzz_custom.ini"
 
 declare -A php_configs=(
-    ["memory_limit"]="${PHP_MEMORY_LIMIT:-64M}"
-    ["post_max_size"]="${PHP_POST_MAX_SIZE:-1024M}"
-    ["upload_max_filesize"]="${PHP_UPLOAD_MAX_FILESIZE:-1024M}"
+    ["PHP_MEMORY_LIMIT"]="memory_limit = ${PHP_MEMORY_LIMIT:-64M}"
+    ["PHP_POST_MAX_SIZE"]="post_max_size = ${PHP_POST_MAX_SIZE:-1024M}"
+    ["PHP_UPLOAD_MAX_FILESIZE"]="upload_max_filesize = ${PHP_UPLOAD_MAX_FILESIZE:-1024M}"
 )
 
 for key in "${!php_configs[@]}"; do
-    sed -i "s/^$key\s*=.*/$key = ${php_configs[$key]}/" "$CONFIG_FILE"
+    sed -i "s|${placeholder}|${php_configs[$placeholder]}|g" "$CONFIG_FILE"
 done
+

@@ -12,7 +12,7 @@
 		format console
 	}
 
-	root * $CADDY_WORK_DIR
+	root * CADDY_WORK_DIR
 	file_server
 
 	php_fastcgi unix//var/run/php-fpm.sock {

@@ -1,27 +1,13 @@
-FROM docker.io/alpine:3
+FROM docker.io/alpine:3.23
 
-# S6
-RUN apk add --no-cache wget ca-certificates && \
-apk --no-cache --update upgrade && \
-cd /tmp && \
-export s6_ver=$(wget -qO- https://api.github.com/repos/just-containers/s6-overlay/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') && \
-export s6_arch=$(arch) && \
-wget https://github.com/just-containers/s6-overlay/releases/download/${s6_ver}/s6-overlay-noarch.tar.xz && \
-wget https://github.com/just-containers/s6-overlay/releases/download/${s6_ver}/s6-overlay-${s6_arch}.tar.xz && \
-wget https://github.com/just-containers/s6-overlay/releases/download/${s6_ver}/s6-overlay-symlinks-arch.tar.xz && \
-wget https://github.com/just-containers/s6-overlay/releases/download/${s6_ver}/s6-overlay-symlinks-noarch.tar.xz && \
-tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz && \
-tar -C / -Jxpf /tmp/s6-overlay-${s6_arch}.tar.xz && \
-tar -C / -Jxpf /tmp/s6-overlay-symlinks-arch.tar.xz && \
-tar -C / -Jxpf /tmp/s6-overlay-symlinks-noarch.tar.xz && \
-rm s6-overlay-noarch.tar.xz && \
-rm s6-overlay-${s6_arch}.tar.xz && \
-rm s6-overlay-symlinks-arch.tar.xz && \
-rm s6-overlay-symlinks-noarch.tar.xz
+ENV PHP_VERSION=84
 
-ARG PHP_VERSION=84
-# 安装依赖
-RUN apk --no-cache add \
+COPY containers/rootfs /
+
+RUN apk --no-cache --update upgrade && \
+  apk --no-cache add wget ca-certificates && \
+  # 安装依赖
+  apk --no-cache add \
   php${PHP_VERSION} \
   php${PHP_VERSION}-fpm \
   php${PHP_VERSION}-mysqli \
@@ -101,24 +87,36 @@ RUN apk --no-cache add \
   curl \
   bash \
   less \
-  caddy
-
-RUN mkdir -p /usr/local/sbin
-
-RUN ln -s /usr/bin/php${PHP_VERSION} /usr/local/sbin/php \
+  caddy && \
+  cd /tmp && \
+  # S6
+  export s6_ver=$(wget -qO- https://api.github.com/repos/just-containers/s6-overlay/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') && \
+  export s6_arch=$(arch) && \
+  wget https://github.com/just-containers/s6-overlay/releases/download/${s6_ver}/s6-overlay-noarch.tar.xz && \
+  wget https://github.com/just-containers/s6-overlay/releases/download/${s6_ver}/s6-overlay-${s6_arch}.tar.xz && \
+  wget https://github.com/just-containers/s6-overlay/releases/download/${s6_ver}/s6-overlay-symlinks-arch.tar.xz && \
+  wget https://github.com/just-containers/s6-overlay/releases/download/${s6_ver}/s6-overlay-symlinks-noarch.tar.xz && \
+  tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz && \
+  tar -C / -Jxpf /tmp/s6-overlay-${s6_arch}.tar.xz && \
+  tar -C / -Jxpf /tmp/s6-overlay-symlinks-arch.tar.xz && \
+  tar -C / -Jxpf /tmp/s6-overlay-symlinks-noarch.tar.xz && \
+  rm s6-overlay-noarch.tar.xz && \
+  rm s6-overlay-${s6_arch}.tar.xz && \
+  rm s6-overlay-symlinks-arch.tar.xz && \
+  rm s6-overlay-symlinks-noarch.tar.xz \
+  # BIN
+  && mkdir -p /usr/local/sbin \
+  && ln -s /usr/bin/php${PHP_VERSION} /usr/local/sbin/php \
   && ln -s /usr/sbin/php-fpm${PHP_VERSION} /usr/local/sbin/php-fpm \
-  && ln -s /usr/sbin/caddy /usr/local/sbin/caddy
-
-# ROOTFS
-COPY containers/rootfs /
-RUN chmod +x /etc/s6-overlay/scripts/* \
+  && ln -s /usr/sbin/caddy /usr/local/sbin/caddy \
+  # ROOTFS
+  && chmod +x /etc/s6-overlay/scripts/* \
   && chmod +x /etc/s6-overlay/s6-rc.d/caddy/data/check \
-  && chmod +x /etc/s6-overlay/s6-rc.d/fpm/data/check
-
-RUN ln -s /etc/php/conf.d/zzz_custom.ini /etc/php${PHP_VERSION}/conf.d/zzz_custom.ini \
-  && ln -s /etc/php/php-fpm.d/zzz_custom.conf /etc/php${PHP_VERSION}/php-fpm.d/zzz_custom.conf
-
-RUN mkdir -p /tmp/caddy
+  && chmod +x /etc/s6-overlay/s6-rc.d/fpm/data/check \
+  && ln -sfn /custom/php/conf.d/zzz_custom.ini /etc/php${PHP_VERSION}/conf.d/zzz_custom.ini \
+  && ln -sfn /custom/php/php-fpm.d/zzz_custom.conf /etc/php${PHP_VERSION}/php-fpm.d/zzz_custom.conf \
+  && ln -sfn /custom/caddy/Caddyfile /etc/caddy/Caddyfile \
+  && mkdir -p /tmp/caddy
 
 WORKDIR /var/www/
 
