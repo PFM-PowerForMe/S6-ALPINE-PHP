@@ -9,6 +9,6 @@ declare -A php_configs=(
 )
 
 for key in "${!php_configs[@]}"; do
-    sed -i "s|${placeholder}|${php_configs[$placeholder]}|g" "$CONFIG_FILE"
+    sed -i "s/^${key}$/${php_configs[$key]}/" "$CONFIG_FILE"
 done
 

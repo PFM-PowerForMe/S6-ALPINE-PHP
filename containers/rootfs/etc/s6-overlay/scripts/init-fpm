@@ -13,5 +13,5 @@ declare -A fpm_configs=(
 )
 
 for key in "${!fpm_configs[@]}"; do
-    sed -i "s|${placeholder}|${fpm_configs[$placeholder]}|g" "$CONFIG_FILE"
+    sed -i "s/^${key}$/${fpm_configs[$key]}/" "$CONFIG_FILE"
 done
