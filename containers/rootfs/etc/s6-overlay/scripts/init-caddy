@@ -7,6 +7,6 @@ declare -A caddy_configs=(
     ["CADDY_REAL_IP"]="http.request.header.${CADDY_REAL_IP:-X-Forwarded-For}"
 )
 
-for placeholder in "${!caddy_configs[@]}"; do
+for key in "${!caddy_configs[@]}"; do
     sed -i "s/^${key}$/${caddy_configs[$key]}/" "$CONFIG_FILE"
 done

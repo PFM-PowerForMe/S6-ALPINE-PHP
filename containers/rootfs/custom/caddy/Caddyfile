@@ -17,7 +17,7 @@
 
 	php_fastcgi unix//var/run/php-fpm.sock {
 		trusted_proxies private_ranges
-		header_up X-Real-IP {$CADDY_REAL_IP}
-		header_up X-Forwarded-For {$CADDY_REAL_IP}
+		header_up X-Real-IP {CADDY_REAL_IP}
+		header_up X-Forwarded-For {CADDY_REAL_IP}
 	}
 }
