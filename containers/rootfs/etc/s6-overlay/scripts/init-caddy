@@ -8,5 +8,5 @@ declare -A caddy_configs=(
 )
 
 for key in "${!caddy_configs[@]}"; do
-    sed -i "s/^${key}$/${caddy_configs[$key]}/" "$CONFIG_FILE"
+    sed -i "s|${key}|${caddy_configs[$key]}|g" "$CONFIG_FILE"
 done
